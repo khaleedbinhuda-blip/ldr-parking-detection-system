@@ -1,0 +1,51 @@
+const int LDR_1 = A0;
+const int LDR_2 = A1;
+const int BUZZER_1 = 9;
+const int BUZZER_2 = 10;
+
+void setup() {
+  pinMode(BUZZER_1, OUTPUT);
+  pinMode(BUZZER_2, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read analog values from LDRs (0 to 1023)
+  int ldrValue1 = analogRead(LDR_1);
+  int ldrValue2 = analogRead(LDR_2);
+
+  int frequency1 = 0;
+  int frequency2 = 0;
+
+  // --- BUZZER 1: Low-to-Mid Pitch Steps ---
+  if (ldrValue1 < 50) {
+    frequency1 = 0;  // Dark
+  } else if (ldrValue1 < 100) {
+    frequency1 = 100;  // Dim
+  } else if (ldrValue1 < 300) {
+    frequency1 = 500;  // Medium Bright
+  } else {
+    frequency1 = 800;  // Very Bright
+  }
+
+  // --- BUZZER 2: Mid-to-High Pitch Steps ---
+  if (ldrValue2 < 50) {
+    frequency2 = 0; // Dark
+  } else if (ldrValue2 < 100) {
+    frequency2 = 1500; // Dim
+  } else if (ldrValue2 < 300) {
+    frequency2 = 2000; // Medium Bright
+  } else {
+    frequency2 = 2500; // Very Bright
+  }
+  
+  Serial.print(ldrValue1);
+  Serial.print(",");
+  Serial.println(ldrValue2);
+  
+  // Play the frequencies on the respective physical buzzers
+  tone(BUZZER_1, frequency1);
+  tone(BUZZER_2, frequency2);
+
+  delay(20); 
+}
